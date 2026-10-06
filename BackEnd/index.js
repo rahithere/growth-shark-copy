@@ -2,11 +2,18 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
+
+//database connection import
+import connectDB from "./db/index.js";
+
 import careerRoute from "./api/career.js";
 import contactRoute from "./api/contact.js";
 import partnersubmitRoute from "./api/partnersubmit.js";
 import aboutusRoute from "./api/aboutus.js";
 import mailRoute from "./api/mail.js";
+
+
+
 // Load env variables
 dotenv.config();
 
@@ -14,6 +21,12 @@ dotenv.config();
 console.log("EMAIL_USER:", process.env.EMAIL_USER ? "Loaded ✅" : "Missing ❌");
 console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded ✅" : "Missing ❌");
 console.log("FRONTEND_URL:", process.env.FRONTEND_URL ? "Loaded ✅" : "Missing ❌");
+
+// initialize database connection
+connectDB()
+
+//server starts anyway even if mongoDB connection fails (for nodemailer to run independently)
+
 
 // Initialize Express app
 const app = express();
