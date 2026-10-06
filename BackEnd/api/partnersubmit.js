@@ -1,6 +1,9 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
+//import submission service for this route
+import { saveFormSubmission } from "../services/formSubmission.js";
+
 // Load environment variables from a .env file
 dotenv.config();
 
@@ -26,8 +29,21 @@ export default async function partnersubmit(req, res) {
             return res.status(400).json({ message: "Missing required form data" });
         }
 
+        //update the data to mongodb
+        saveFormSubmission({
+            fullName: answers.name,
+            email: answers.email,
+            phone: "N/A",
+            website: "N/A",
+            service: "N/A",
+            message: "N/A",
+            source: "home-form-2",
+            mode: "attack"
+        }, "Home-form 2 quiz")
+
+
         // Use the recipient email from the environment variable for better security
-        const recipientEmail = process.env.EMAIL_TO; 
+        const recipientEmail = process.env.EMAIL_TO;
 
         // Generate a clear, formatted email body from the quiz answers.
         const emailBody = `
@@ -57,7 +73,7 @@ export default async function partnersubmit(req, res) {
 
         // Send the email
         await transporter.sendMail(mailOptions);
-        
+
         // Return a success response
         return res.status(200).json({ message: "Message sent successfully!" });
 

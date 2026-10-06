@@ -1,6 +1,7 @@
 import multer from 'multer';
 import nodemailer from 'nodemailer';
 import dotenv from "dotenv";
+import { saveFormSubmission } from '../services/formSubmission.js';
 
 // Load environment variables
 dotenv.config();
@@ -45,9 +46,21 @@ export default function handler(req, res) {
     const { name, email, countryCode, whatsapp } = req.body;
 
     // Validation
+
     if (!name || !email || !countryCode || !whatsapp || !req.file) {
       return res.status(400).json({ message: 'All fields are required' });
     }
+
+    saveFormSubmission({
+      fullName: name,
+      email,
+      phone: `${countryCode} ${whatsapp}`,
+      website: "N/A",
+      service: "N/A",
+      message: "<system> : Access the resume in MAIL",
+      source: "career",
+      mode: "N/A"
+    }, "Career-section form")
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -68,9 +81,9 @@ export default function handler(req, res) {
       `,
       attachments: req.file
         ? [{
-            filename: req.file.originalname,
-            content: req.file.buffer,
-          }]
+          filename: req.file.originalname,
+          content: req.file.buffer,
+        }]
         : [],
     };
 

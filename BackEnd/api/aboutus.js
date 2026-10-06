@@ -2,6 +2,10 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
+// submission service for, mongodb
+import { saveFormSubmission } from "../services/formSubmission.js";
+
+
 // Load environment variables
 dotenv.config();
 
@@ -40,6 +44,17 @@ export default function handler(req, res) {
   if (!name || !email || !contact || !website || !service || !requirement || !revenue) {
     return res.status(400).json({ message: "All fields are required" });
   }
+
+  saveFormSubmission({
+    fullName: name,
+    email,
+    phone: contact,
+    website,
+    service,
+    message: requirement,
+    source: "home-form-1",
+    mode: "attack"
+  }, "Home-Form 1")
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {

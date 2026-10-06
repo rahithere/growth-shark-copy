@@ -1,6 +1,7 @@
 // backend/api/contact.js
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { saveFormSubmission } from "../services/formSubmission.js";
 
 // Load environment variables
 dotenv.config();
@@ -30,12 +31,24 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  //save data to mongodb
+  saveFormSubmission({
+    fullName: name,
+    email,
+    message,
+    phone: "N/A",
+    website: "N/A",
+    service: "N/A",
+    source: "contact",
+    mode: "N/A"
+  }, "Contact-section form")
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
     replyTo: email,
     to: process.env.EMAIL_TO, // Send to yourself
     subject: `New Message from ${name}`,
-    text:`
+    text: `
      Name: ${name}
      Email: ${email}
      message: ${message}
