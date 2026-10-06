@@ -10,47 +10,50 @@ function ContactSection() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-async function handleSubmit(e) {
-  e.preventDefault();
-  setStatus("Sending...");
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus("Sending...");
 
-  try {
-    // ✅ Ensure no double slash in URL
-    const baseUrl = import.meta.env.VITE_API_URL.replace(/\/+$/, ""); 
-    const response = await fetch(`${baseUrl}/api/contact`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+    try {
+      // ✅ Ensure no double slash in URL
+      // const baseUrl = import.meta.env.VITE_API_URL.replace(/\/+$/, ""); 
 
-    // ✅ Check if response is not OK
-    if (!response.ok) {
-      const contentType = response.headers.get("content-type");
-      let errorMessage;
+      //for develoment
+      const baseUrl = "http://localhost:5000"
+      const response = await fetch(`${baseUrl}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-      if (contentType?.includes("application/json")) {
-        const errorData = await response.json();
-        errorMessage = errorData.message || "Unknown error";
-      } else {
-        errorMessage = await response.text(); // probably HTML error page
+      // ✅ Check if response is not OK
+      if (!response.ok) {
+        const contentType = response.headers.get("content-type");
+        let errorMessage;
+
+        if (contentType?.includes("application/json")) {
+          const errorData = await response.json();
+          errorMessage = errorData.message || "Unknown error";
+        } else {
+          errorMessage = await response.text(); // probably HTML error page
+        }
+
+        console.error("Error:", errorMessage);
+        setStatus(`Error: ${errorMessage}`);
+        return;
       }
 
-      console.error("Error:", errorMessage);
-      setStatus(`Error: ${errorMessage}`);
-      return;
+      // ✅ Success case
+      const data = await response.json();
+      console.log("Success:", data.message);
+      setStatus("Message sent successfully!");
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setStatus("Error sending message. Please try again.");
     }
-
-    // ✅ Success case
-    const data = await response.json();
-    console.log("Success:", data.message);
-    setStatus("Message sent successfully!");
-  } catch (error) {
-    console.error("Contact form error:", error);
-    setStatus("Error sending message. Please try again.");
   }
-}
 
   return (
     <section className="text-white pt-30 bg-gradient-to-r from-black via-[#0b223f] to-[#06263f] relative overflow-hidden">

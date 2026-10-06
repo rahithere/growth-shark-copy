@@ -62,6 +62,7 @@ app.use("/api/career", careerRoute);
 app.use("/api/partnersubmit", partnersubmitRoute); // Use app.use for consistent routing
 app.use("/api/aboutus", aboutusRoute);
 app.use("/api/contact", contactRoute);
+app.use("/api/mail", mailRoute);
 console.log("Route registered: /api/mail ✅");
 // Default route with health check
 app.get("/", (req, res) => {

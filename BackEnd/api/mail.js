@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { saveFormSubmission } from "../services/formSubmission.js";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -15,18 +16,29 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { name, email, message } = req.body;
+  const { name, email, message, source } = req.body;
 
   if (!name || !email || !message) {
     return res.status(400).json({ message: "All fields are required" });
   }
+
+  saveFormSubmission({
+    fullName: name,
+    email: email,
+    phone: "N/A",
+    website: "N/A",
+    service: "N/A",
+    message,
+    source,
+    mode: "N/A"
+  }, `${source} form`)
 
   try {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_TO,
       replyTo: email,
-      subject: `New Inquiry from ${name}`,
+      subject: `New Inquiry from ${name} service: ${source}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
     });
 

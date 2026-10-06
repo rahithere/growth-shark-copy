@@ -228,11 +228,11 @@ export default function CampaignDental() {
                                     <p className="text-gray-400 max-w-2xl mx-auto mb-5">
                                           As a dental office marketing company, we understand that patients want trust, accuracy, and credibility when it comes to oral health. Therefore, we respect that using our dental marketing services that pay attention to strategies instead of short-term tricks.
                                     </p>
-                                     <p className="text-gray-400 max-w-2xl mx-auto mb-5">
-                                          Our support includes dental internet marketing services, dental practice marketing, dental practice marketing companies, and internal marketing dental office alignment because we prioritize client retention. 
+                                    <p className="text-gray-400 max-w-2xl mx-auto mb-5">
+                                          Our support includes dental internet marketing services, dental practice marketing, dental practice marketing companies, and internal marketing dental office alignment because we prioritize client retention.
                                     </p>
-                                     <p className="text-gray-400 max-w-2xl mx-auto mb-10">
-                                         With our marketing strategy dental clinic support, your clinic will thrive like no other!
+                                    <p className="text-gray-400 max-w-2xl mx-auto mb-10">
+                                          With our marketing strategy dental clinic support, your clinic will thrive like no other!
                                     </p>
 
                                     {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -277,7 +277,7 @@ export default function CampaignDental() {
                                           >
                                                 Contact us today to know more about what we can do for you!
                                           </a>
-                                          <ContactForm />
+                                          <ContactForm source="dental" />
 
                                           <p className="text-gray-200 text-lg mt-4">
                                                 and let's help your dental clinic get the visibility and patient flow it truly deserves.
