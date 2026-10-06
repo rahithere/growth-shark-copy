@@ -24,7 +24,7 @@ function PartnerForm() {
 
     const checkEligibility = (responses) => {
         const { age, revenue, team, time } = responses;
-        
+
         if (
             age !== 'Less than 1 year' &&
             revenue !== 'Less than $5000' &&
@@ -33,7 +33,7 @@ function PartnerForm() {
         ) {
             return 'Yes';
         }
-        
+
         return 'No';
     };
 
@@ -41,17 +41,19 @@ function PartnerForm() {
     const handleSubmit = async () => {
         setIsLoading(true);
         const eligibility = checkEligibility(answers);
-        
+
         try {
             // This is the key change: Use the environment variable to get the full API URL.
-            const apiUrl = `${import.meta.env.VITE_API_URL}/api/partnersubmit`;
-            
-            const response = await fetch(apiUrl, {
+            // const baseUrl = import.meta.env.VITE_API_URL;
+
+            // for development
+            const baseUrl = "http://localhost:5000"
+            const response = await fetch(`${baseUrl}/api/partnersubmit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ answers, eligibility }),
+                body: JSON.stringify({ answers, eligibility, mode: "attack" }),
             });
 
             if (!response.ok) {
@@ -61,7 +63,7 @@ function PartnerForm() {
 
             const data = await response.json();
             console.log(data.message);
-            
+
             setQuizResult({ eligible: eligibility });
 
         } catch (error) {
@@ -76,7 +78,7 @@ function PartnerForm() {
     const handleNext = () => {
         const currentAnswer = answers[currentQuestion.id];
         if (!currentAnswer) {
-            console.error("Please answer the question"); 
+            console.error("Please answer the question");
             return;
         }
 
@@ -87,7 +89,7 @@ function PartnerForm() {
             handleSubmit();
         }
     };
-    
+
     const renderQuestionContent = () => {
         if (currentQuestion.type === 'text' || currentQuestion.type === 'email') {
             return (
@@ -137,7 +139,7 @@ function PartnerForm() {
                     </>
                 );
             } else if (quizResult.eligible === 'No') {
-                 return (
+                return (
                     <>
                         <h3 className="text-2xl font-bold">Apologies, you still need to stay stealthy before you can go out for delegation. </h3>
                         <a href="https://calendly.com/proriterz101/30min" className="bg-lime-400 shadow-lg shadow-black/50 hover:brightness-110 transition text-black font-semibold px-8 py-3 rounded-full  text-base mt-6 inline-block ">

@@ -22,7 +22,7 @@ const transporter = nodemailer.createTransport({
 export default async function partnersubmit(req, res) {
     try {
         // Destructure the answers and eligibility from the request body
-        const { answers, eligibility } = req.body;
+        const { answers, eligibility, mode } = req.body;
 
         // Ensure we have the necessary data
         if (!answers || !answers.name || !answers.email) {
@@ -36,9 +36,9 @@ export default async function partnersubmit(req, res) {
             phone: "N/A",
             website: "N/A",
             service: "N/A",
-            message: "N/A",
+            message: "<system> : Retrieve answered quiz from MAIL",
             source: "home-form-2",
-            mode: "attack"
+            mode: mode || "N/A"
         }, "Home-form 2 quiz")
 
 

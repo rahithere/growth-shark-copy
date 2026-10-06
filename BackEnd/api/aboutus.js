@@ -38,7 +38,7 @@ export default function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { name, email, contact, website, service, requirement, revenue } = req.body;
+  const { name, email, contact, website, service, requirement, revenue, mode } = req.body;
 
   // ✅ Validation
   if (!name || !email || !contact || !website || !service || !requirement || !revenue) {
@@ -53,7 +53,7 @@ export default function handler(req, res) {
     service,
     message: requirement,
     source: "home-form-1",
-    mode: "attack"
+    mode: mode || "N/A"
   }, "Home-Form 1")
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

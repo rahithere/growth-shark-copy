@@ -16,6 +16,9 @@ const ContactForm = ({ source }) => {
       // Remove trailing slash if present
       const baseUrl = import.meta.env.VITE_API_URL.replace(/\/+$/, "");
 
+      // for development
+      // const baseUrl = "http://localhost:5000"
+
       const response = await fetch(`${baseUrl}/api/mail`, {
         method: "POST",
         headers: {

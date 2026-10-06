@@ -59,10 +59,15 @@ const AboutSection = () => {
     setMessage("");
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/aboutus`, {
+      const baseUrl = import.meta.env.VITE_API_URL
+
+      //for devlopment only
+      // const baseUrl = "http://localhost:5000"
+
+      const res = await fetch(`${baseUrl}/api/aboutus`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, mode: "attack" }),
       });
 
       const data = await res.json();

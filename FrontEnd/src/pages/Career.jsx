@@ -43,7 +43,10 @@ export default function Career() {
     setStatus("Submitting...");
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/career`, { 
+      const baseUrl = import.meta.env.VITE_API_URL
+      // for development
+      // const baseUrl = "http://localhost:5000"
+      const res = await fetch(`${baseUrl}/api/career`, {
         method: "POST",
         body: data,
         // No Content-Type header is needed for FormData,
@@ -257,8 +260,8 @@ export default function Career() {
             <a href="mailto:marketing@grothshark.io" className="text-sky-400 underline">
               marketing@grothshark.io
             </a>
-            <br/> {" "}
-              <a href="mailto:diptesh@growthshark.io" className="text-sky-400 underline">
+            <br /> {" "}
+            <a href="mailto:diptesh@growthshark.io" className="text-sky-400 underline">
               diptesh@growthshark.io
             </a>
           </p>

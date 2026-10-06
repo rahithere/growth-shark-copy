@@ -28,7 +28,7 @@ function PartnerForm() {
     // Logic to determine if a user is eligible based on their answers
     const checkEligibility = (responses) => {
         const { age, revenue, team, time } = responses;
-        
+
         if (
             age !== 'Less than 1 year' &&
             revenue !== 'Less than $5000' &&
@@ -37,7 +37,7 @@ function PartnerForm() {
         ) {
             return 'Yes';
         }
-        
+
         return 'No';
     };
 
@@ -45,16 +45,19 @@ function PartnerForm() {
     const handleSubmit = async () => {
         setIsLoading(true);
         const eligibility = checkEligibility(answers);
-        
+
         try {
-            const apiUrl = `${import.meta.env.VITE_API_URL}/api/partnersubmit`;
-            
-            const response = await fetch(apiUrl, {
+            // const baseUrl = import.meta.env.VITE_API_URL
+
+            // for development
+            const baseUrl = "http://localhost:5000";
+
+            const response = await fetch(`${baseUrl}/api/partnersubmit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ answers, eligibility }),
+                body: JSON.stringify({ answers, eligibility, mode: "stealth" }),
             });
 
             if (!response.ok) {
@@ -63,7 +66,7 @@ function PartnerForm() {
 
             const data = await response.json();
             console.log(data.message);
-            
+
             setQuizResult({ eligible: eligibility });
 
         } catch (error) {
@@ -79,7 +82,7 @@ function PartnerForm() {
     const handleNext = () => {
         const currentAnswer = answers[currentQuestion.id];
         if (!currentAnswer) {
-            console.error("Please answer the question"); 
+            console.error("Please answer the question");
             return;
         }
 
@@ -91,43 +94,43 @@ function PartnerForm() {
             handleSubmit();
         }
     };
-    
+
     // Renders the input or radio button options for the current question
-  const renderQuestionContent = () => {
-    if (currentQuestion.type === 'text' || currentQuestion.type === 'email') {
-        return (
-            <input
-                type={currentQuestion.type}
-                name={currentQuestion.id}
-                placeholder={`Write your ${currentQuestion.id} here...`}
-                className="w-full px-6 py-4 rounded-full bg-[#1e3a47] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#49b9ff] transition  text-base mt-5"
-                value={answers[currentQuestion.id] || ''}
-                onChange={handleInputChange}
-            />
-        );
-    } else {
-        return (
-            <div className="flex flex-col space-y-4  mt-5 ">
-                {currentQuestion.options.map((option, index) => (
-                    <label
-                        key={index}
-                        className="flex items-center space-x-3 text-lg cursor-pointer"
-                    >
-                        <input
-                            type="radio"
-                            name={currentQuestion.id}
-                            value={option}
-                            checked={answers[currentQuestion.id] === option}
-                            onChange={handleInputChange}
-                            className="form-radio h-5 w-5 text-[#49b9ff] bg-transparent border-gray-500 checked:bg-[#49b9ff] focus:ring-[#49b9ff]"
-                        />
-                        <span className="text-white">{option}</span>
-                    </label>
-                ))}
-            </div>
-        );
-    }
-};
+    const renderQuestionContent = () => {
+        if (currentQuestion.type === 'text' || currentQuestion.type === 'email') {
+            return (
+                <input
+                    type={currentQuestion.type}
+                    name={currentQuestion.id}
+                    placeholder={`Write your ${currentQuestion.id} here...`}
+                    className="w-full px-6 py-4 rounded-full bg-[#1e3a47] text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#49b9ff] transition  text-base mt-5"
+                    value={answers[currentQuestion.id] || ''}
+                    onChange={handleInputChange}
+                />
+            );
+        } else {
+            return (
+                <div className="flex flex-col space-y-4  mt-5 ">
+                    {currentQuestion.options.map((option, index) => (
+                        <label
+                            key={index}
+                            className="flex items-center space-x-3 text-lg cursor-pointer"
+                        >
+                            <input
+                                type="radio"
+                                name={currentQuestion.id}
+                                value={option}
+                                checked={answers[currentQuestion.id] === option}
+                                onChange={handleInputChange}
+                                className="form-radio h-5 w-5 text-[#49b9ff] bg-transparent border-gray-500 checked:bg-[#49b9ff] focus:ring-[#49b9ff]"
+                            />
+                            <span className="text-white">{option}</span>
+                        </label>
+                    ))}
+                </div>
+            );
+        }
+    };
 
 
     // Renders the appropriate content based on the quiz state (loading, result, or questions)
@@ -167,8 +170,8 @@ function PartnerForm() {
             <>
                 <h2 className="text-base sm:text-lg md:text-xl font-semibold">{currentQuestion.q}</h2>
 
-                    {renderQuestionContent()}
-                
+                {renderQuestionContent()}
+
                 <div className="flex justify-center mt-6">
                     <button
                         onClick={handleNext}
