@@ -59,10 +59,10 @@ const AboutSection = () => {
     setMessage("");
 
     try {
-      // const baseUrl = import.meta.env.VITE_API_URL
+      const baseUrl = import.meta.env.VITE_API_URL
 
       //for devlopment only
-      const baseUrl = "http://localhost:5000"
+      // const baseUrl = "http://localhost:5000"
 
       const res = await fetch(`${baseUrl}/api/aboutus`, {
         method: "POST",

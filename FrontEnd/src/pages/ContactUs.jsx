@@ -16,10 +16,10 @@ function ContactSection() {
 
     try {
       // ✅ Ensure no double slash in URL
-      // const baseUrl = import.meta.env.VITE_API_URL.replace(/\/+$/, "");
+      const baseUrl = import.meta.env.VITE_API_URL.replace(/\/+$/, "");
 
       //for develoment
-      const baseUrl = "http://localhost:5000"
+      // const baseUrl = "http://localhost:5000"
       const response = await fetch(`${baseUrl}/api/contact`, {
         method: "POST",
         headers: {

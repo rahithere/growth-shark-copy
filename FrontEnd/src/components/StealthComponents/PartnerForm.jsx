@@ -47,10 +47,10 @@ function PartnerForm() {
         const eligibility = checkEligibility(answers);
 
         try {
-            // const baseUrl = import.meta.env.VITE_API_URL
+            const baseUrl = import.meta.env.VITE_API_URL
 
             // for development
-            const baseUrl = "http://localhost:5000";
+            // const baseUrl = "http://localhost:5000";
 
             const response = await fetch(`${baseUrl}/api/partnersubmit`, {
                 method: 'POST',

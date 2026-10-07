@@ -58,7 +58,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api/contact", contactRoute);
+// app.use("/api/contact", contactRoute);
 app.use("/api/career", careerRoute);
 app.use("/api/partnersubmit", partnersubmitRoute); // Use app.use for consistent routing
 app.use("/api/aboutus", aboutusRoute);

@@ -43,9 +43,9 @@ export default function Career() {
     setStatus("Submitting...");
 
     try {
-      // const baseUrl = import.meta.env.VITE_API_URL
+      const baseUrl = import.meta.env.VITE_API_URL
       // for development
-      const baseUrl = "http://localhost:5000"
+      // const baseUrl = "http://localhost:5000"
       const res = await fetch(`${baseUrl}/api/career`, {
         method: "POST",
         body: data,
