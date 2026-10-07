@@ -63,8 +63,6 @@ function AppContent() {
   const location = useLocation();
   const isCampaignPage = location.pathname.startsWith("/lawers");
 
-  const isAdminPage = location.pathname.startsWith("/admin");
-
   const toggleMode = () => {
     console.log("Toggling mode, isStealth before:", isStealth);
     setIsStealth((prev) => {
@@ -202,13 +200,22 @@ function AppContent() {
   );
 }
 
+
+function AppRouter() {
+  const location = useLocation();
+
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  return isAdmin ? <Admin /> : <AppContent />;
+}
+
 export default function App() {
   const isAdmin = window.location.pathname === "/admin";
 
   return (
     <HelmetProvider>
       <Router>
-        {isAdmin ? <Admin /> : <AppContent />}
+        <AppRouter />
       </Router>
     </HelmetProvider>
   );

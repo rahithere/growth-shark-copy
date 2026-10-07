@@ -21,8 +21,10 @@ const Admin = () => {
             setLoading(true);
             setError("");
 
+            // const baseUrl = import.meta.env.VITE_API_URL
+            const baseUrl = "https://growth-shark-backend-3aiw.onrender.com"
             const response = await fetch(
-                "http://localhost:5000/api/admin/submissions"
+                `${baseUrl}/api/admin/submissions`
             );
 
             if (!response.ok) {
