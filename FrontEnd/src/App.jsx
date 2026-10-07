@@ -43,6 +43,7 @@ import InstaMarketing from "./pages/services/InstaMarketing";
 // import OnlineEngagement from "./pages/services/OnlineEngagement";
 import SocialListening from "./pages/services/SocialListening";
 import VideoContent from "./pages/services/VideoContent";
+import Admin from "./pages/Admin.jsx";
 
 // Canonical Helmet
 function CanonicalHelmet() {
@@ -62,6 +63,8 @@ function AppContent() {
   const location = useLocation();
   const isCampaignPage = location.pathname.startsWith("/lawers");
 
+  const isAdminPage = location.pathname.startsWith("/admin");
+
   const toggleMode = () => {
     console.log("Toggling mode, isStealth before:", isStealth);
     setIsStealth((prev) => {
@@ -74,56 +77,138 @@ function AppContent() {
     <>
       <CanonicalHelmet />
       <ScrollToTop />
-      <Navbar toggleMode={toggleMode} isStealth={isStealth} />
+
+      <Navbar
+        toggleMode={toggleMode}
+        isStealth={isStealth}
+      />
+
       <Routes>
-        <Route path="/" element={isStealth ? <HomeStealth /> : <HomeAttack />} />
+        {/* Home */}
+        <Route
+          path="/"
+          element={isStealth ? <HomeStealth /> : <HomeAttack />}
+        />
+
         <Route path="/attack" element={<HomeAttack />} />
         <Route path="/stealth" element={<HomeStealth />} />
+
+        {/* Main Pages */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/career" element={<Career />} />
         <Route path="/portfolio" element={<Portfolio />} />
+
+        {/* Campaign Pages */}
         <Route path="/lawyer" element={<CampaignLawFirms />} />
         <Route path="/plumber" element={<CampaignPlumbers />} />
         <Route path="/roofer" element={<CampaignRoofers />} />
         <Route path="/dental" element={<CampaignDental />} />
+
         {/* Portfolio Cases */}
         <Route path="/portfolio/smm1" element={<Smm1 />} />
         <Route path="/portfolio/smm2" element={<Smm2 />} />
         <Route path="/portfolio/pms" element={<PMS />} />
         <Route path="/portfolio/ocs" element={<OCS />} />
         <Route path="/portfolio/cb2b" element={<CB2B />} />
+
         {/* Services */}
         {/* <Route path="/services/automation" element={<Automation />} /> */}
-        <Route path="/services/b2b-seo-service" element={<B2B />} />
-        <Route path="/services/blog-writing-service" element={<Blog />} />
-        {/* <Route path="/services/community-engagement" element={<CommunityEngagement />} /> */}
-        <Route path="/services/community-management" element={<CommunityManagement />} />
-        <Route path="/services/content-creation-services" element={<ContentCreation />} />
-        <Route path="/services/copywriting-services" element={<CopyWriting />} />
-        <Route path="/services/ecommerce-seo-services" element={<Ecommerce />} />
-        {/* <Route path="/services/email-campaign" element={<EmailCampaigns />} /> */}
-        <Route path="/services/email-marketing-services" element={<EmailMarketing />} />
-        <Route path="/services/facebook-marketing" element={<FacebookMarketing />} />
-        {/* <Route path="/services/feedback" element={<Feedback />} /> */}
-        <Route path="/services/insta-marketing" element={<InstaMarketing />} />
-        {/* <Route path="/services/online-engagement" element={<OnlineEngagement />} /> */}
-        <Route path="/services/social-listening" element={<SocialListening />} />
-        <Route path="/services/video-editing-service" element={<VideoContent />} />
+
+        <Route
+          path="/services/b2b-seo-service"
+          element={<B2B />}
+        />
+
+        <Route
+          path="/services/blog-writing-service"
+          element={<Blog />}
+        />
+
+        {/* <Route
+        path="/services/community-engagement"
+        element={<CommunityEngagement />}
+      /> */}
+
+        <Route
+          path="/services/community-management"
+          element={<CommunityManagement />}
+        />
+
+        <Route
+          path="/services/content-creation-services"
+          element={<ContentCreation />}
+        />
+
+        <Route
+          path="/services/copywriting-services"
+          element={<CopyWriting />}
+        />
+
+        <Route
+          path="/services/ecommerce-seo-services"
+          element={<Ecommerce />}
+        />
+
+        {/* <Route
+        path="/services/email-campaign"
+        element={<EmailCampaigns />}
+      /> */}
+
+        <Route
+          path="/services/email-marketing-services"
+          element={<EmailMarketing />}
+        />
+
+        <Route
+          path="/services/facebook-marketing"
+          element={<FacebookMarketing />}
+        />
+
+        {/* <Route
+        path="/services/feedback"
+        element={<Feedback />}
+      /> */}
+
+        <Route
+          path="/services/insta-marketing"
+          element={<InstaMarketing />}
+        />
+
+        {/* <Route
+        path="/services/online-engagement"
+        element={<OnlineEngagement />}
+      /> */}
+
+        <Route
+          path="/services/social-listening"
+          element={<SocialListening />}
+        />
+
+        <Route
+          path="/services/video-editing-service"
+          element={<VideoContent />}
+        />
+
         {/* Blog */}
         <Route path="/blog" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+
+        {/* <Route path="/admin" element={<Admin />} /> */}
       </Routes>
+
       <Footer />
     </>
   );
 }
 
 export default function App() {
+  const isAdmin = window.location.pathname === "/admin";
+
   return (
     <HelmetProvider>
       <Router>
-        <AppContent />
+        {isAdmin ? <Admin /> : <AppContent />}
       </Router>
     </HelmetProvider>
   );
