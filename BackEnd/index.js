@@ -11,6 +11,7 @@ import contactRoute from "./api/contact.js";
 import partnersubmitRoute from "./api/partnersubmit.js";
 import aboutusRoute from "./api/aboutus.js";
 import mailRoute from "./api/mail.js";
+import adminSubmissions from "./api/adminSubmissions.js";
 
 
 
@@ -63,6 +64,7 @@ app.use("/api/partnersubmit", partnersubmitRoute); // Use app.use for consistent
 app.use("/api/aboutus", aboutusRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/mail", mailRoute);
+app.use("/api/admin/submissions", adminSubmissions);
 console.log("Route registered: /api/mail ✅");
 // Default route with health check
 app.get("/", (req, res) => {
