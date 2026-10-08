@@ -4,8 +4,8 @@ import { Admin } from "../models/admin.models.js";
 const verifyJWT = async (req, res, next) => {
     try {
         const token = req.cookies?.accessToken;
-        console.log(req.cookies)
-        console.log(token)
+        // console.log(req.cookies)
+        // console.log(token)
         if (!token) {
             return res.status(401).json({
                 success: false,
