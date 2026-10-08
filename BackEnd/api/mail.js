@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   }, `${source} form`)
 
   if (!saved) {
-    res
+    return res
       .status(500)
       .json(new ApiResponse(500, null, "Failed to save the data"))
   }

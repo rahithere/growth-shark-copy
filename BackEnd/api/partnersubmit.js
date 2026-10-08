@@ -34,7 +34,7 @@ export default async function partnersubmit(req, res) {
 
 
     if (!saved) {
-        res
+        return res
             .status(500)
             .json(new ApiResponse(500, null, "Failed to save submission"));
     }
