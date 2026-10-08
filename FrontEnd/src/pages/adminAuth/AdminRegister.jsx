@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo.png"
 
 const AdminRegister = () => {
     const navigate = useNavigate();
@@ -36,7 +37,7 @@ const AdminRegister = () => {
             setLoading(true);
 
             const response = await fetch(
-                `${import.meta.env.VITE_API_URL}/admin/register`,
+                `${import.meta.env.VITE_API_URL}/api/admin/register`,
                 {
                     method: "POST",
                     headers: {
@@ -65,10 +66,12 @@ const AdminRegister = () => {
         <div className="min-h-screen bg-zinc-950 text-white">
             {/* Logo */}
             <div className="px-6 py-6 md:px-10">
-                <h1 className="text-xl font-bold tracking-tight">
-                    GROWTH
-                    <span className="text-[#71B5F0]">SHARK</span>
-                </h1>
+                <img
+                    src={logo}
+                    alt="Growthshark"
+                    className="w-[120px] object-contain"
+                />
+
             </div>
 
             {/* Register */}

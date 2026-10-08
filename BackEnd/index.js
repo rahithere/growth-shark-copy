@@ -50,6 +50,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
+    credentials: true,
     methods: ["GET", "POST", "OPTIONS"], // Explicitly allow common methods
     allowedHeaders: ["Content-Type", "Authorization"],
   })
