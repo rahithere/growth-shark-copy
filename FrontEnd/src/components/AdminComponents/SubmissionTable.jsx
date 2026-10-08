@@ -82,8 +82,11 @@ const SubmissionTable = ({
                                     )}
 
                                     {submission.mode === "N/A" && (
-                                        <span className="text-sm text-stone-600">
-                                            —
+                                        // <span className="text-sm text-stone-600">
+                                        //     —
+                                        // </span>
+                                        <span className="rounded-full bg-pink-100 px-3 py-1 text-xs font-bold uppercase text-black">
+                                            Default
                                         </span>
                                     )}
                                 </div>

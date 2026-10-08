@@ -84,7 +84,7 @@ const Admin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-stone-950 text-stone-100">
+        <div className="min-h-screen bg-zinc-950 text-stone-100">
 
             <AdminHeader />
 
