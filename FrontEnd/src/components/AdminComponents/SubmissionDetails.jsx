@@ -71,7 +71,7 @@ const SubmissionDetails = ({ submission }) => {
                             value={submission.email}
                         />
 
-                        {submission.phone && (
+                        {submission.phone !== "N/A" && (
                             <DetailItem
                                 label="Phone"
                                 value={submission.phone}
@@ -82,7 +82,7 @@ const SubmissionDetails = ({ submission }) => {
                 </div>
 
                 {/* Business */}
-                {(submission.website || submission.service) && (
+                {(submission.website || submission.service) !== "N/A" && (
                     <div className="mt-8 border-t border-stone-800 pt-6">
                         <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">
                             Business
@@ -108,17 +108,36 @@ const SubmissionDetails = ({ submission }) => {
                     </div>
                 )}
 
-                {/* Message */}
-                {submission.message && (
-                    <div className="mt-8 border-t border-stone-800 pt-6">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">
-                            Message
-                        </p>
+                {/* if source career then Message resume link if no then normal message  */}
+                {submission.source === "career" ? (
+                    submission.message && (
+                        <div className="mt-8 border-t border-stone-800 pt-6">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                                Resume
+                            </p>
 
-                        <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-stone-300">
-                            {submission.message}
-                        </p>
-                    </div>
+                            <a
+                                href={submission.message.replace("resume: ", "")}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-4 inline-block rounded-md bg-stone-800 px-4 py-2 text-sm font-medium text-stone-200 transition hover:bg-stone-700"
+                            >
+                                Resume
+                            </a>
+                        </div>
+                    )
+                ) : (
+                    submission.message && (
+                        <div className="mt-8 border-t border-stone-800 pt-6">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                                Message
+                            </p>
+
+                            <p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-stone-300">
+                                {submission.message}
+                            </p>
+                        </div>
+                    )
                 )}
 
                 {/* Metadata */}
