@@ -1,26 +1,26 @@
 // aboutus.js
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 // submission service for, mongodb
 import { saveFormSubmission } from "../services/formSubmission.js";
 
+import { ApiResponse } from "../utils/apiResponse.js";
 
 // Load environment variables
 dotenv.config();
 
 // Email transporter configuration
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   host: "smtp.gmail.com",
+//   port: 465,
+//   secure: true,
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+// });
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   // ✅ CORS headers
   res.setHeader(
     "Access-Control-Allow-Origin",
@@ -45,7 +45,12 @@ export default function handler(req, res) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  saveFormSubmission({
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+  const saved = await saveFormSubmission({
     fullName: name,
     email,
     phone: contact,
@@ -56,35 +61,14 @@ export default function handler(req, res) {
     mode: mode || "N/A"
   }, "Home-Form 1")
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({ message: "Invalid email format" });
+  if (!saved) {
+    res
+      .status(500)
+      .json(new ApiResponse(500, null, "Failed to save submission"));
   }
 
-  // ✅ Email content
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    replyTo: email,
-    to: process.env.EMAIL_TO,
-    subject: `New Lead from Contact Form: ${name}`,
-    text: `
-      Name: ${name}
-      Email: ${email}
-      Contact: ${contact}
-      Website: ${website}
-      Service Interested: ${service}
-      Requirement: ${requirement}
-      Revenue: ${revenue}
-    `,
-  };
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Form submitted succesfully"))
 
-  // ✅ Send email
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.error("Email error:", err);
-      return res.status(500).json({ message: "Error sending email", error: err.message });
-    }
-    console.log("Message sent:", info.response);
-    res.status(200).json({ message: "Form submitted and email sent successfully" });
-  });
 }

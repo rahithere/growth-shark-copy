@@ -23,8 +23,6 @@ console.log("EMAIL_USER:", process.env.EMAIL_USER ? "Loaded ✅" : "Missing ❌"
 console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded ✅" : "Missing ❌");
 console.log("FRONTEND_URL:", process.env.FRONTEND_URL ? "Loaded ✅" : "Missing ❌");
 
-// initialize database connection
-connectDB()
 
 //server starts anyway even if mongoDB connection fails (for nodemailer to run independently)
 
@@ -83,5 +81,14 @@ export default app;
 // For local development only (commented out in production)
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server is running at port ${PORT}`)
+      })
+    }).catch((error) => {
+      console.log("server not started becasu")
+      throw error
+    })
 }

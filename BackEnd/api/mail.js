@@ -1,15 +1,5 @@
-import nodemailer from "nodemailer";
 import { saveFormSubmission } from "../services/formSubmission.js";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -22,7 +12,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  saveFormSubmission({
+  const saved = await saveFormSubmission({
     fullName: name,
     email: email,
     phone: "N/A",
@@ -33,24 +23,15 @@ export default async function handler(req, res) {
     mode: "N/A"
   }, `${source} form`)
 
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO,
-      replyTo: email,
-      subject: `New Inquiry from ${name} service: ${source}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-    });
-
-    return res.status(200).json({
-      success: true,
-      message: "Message sent successfully!",
-    });
-  } catch (error) {
-    console.error("Mail Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to send message",
-    });
+  if (!saved) {
+    res
+      .status(500)
+      .json(new ApiResponse(500, null, "Failed to save the data"))
   }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Data saved successfully"))
+
+
 }
