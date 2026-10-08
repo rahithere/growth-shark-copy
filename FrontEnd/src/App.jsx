@@ -43,7 +43,12 @@ import InstaMarketing from "./pages/services/InstaMarketing";
 // import OnlineEngagement from "./pages/services/OnlineEngagement";
 import SocialListening from "./pages/services/SocialListening";
 import VideoContent from "./pages/services/VideoContent";
+
+// admin
 import Admin from "./pages/Admin.jsx";
+import AdminLogin from "./pages/adminAuth/AdminLogin.jsx";
+import AdminRegister from "./pages/adminAuth/AdminRegister.jsx";
+
 
 // Canonical Helmet
 function CanonicalHelmet() {
@@ -205,6 +210,14 @@ function AppRouter() {
   const location = useLocation();
 
   const isAdmin = location.pathname.startsWith("/admin");
+
+  if (location.pathname === "/admin/login") {
+    return <AdminLogin />
+  }
+
+  if (location.pathname === "/admin/register") {
+    return <AdminRegister />
+  }
 
   return isAdmin ? <Admin /> : <AppContent />;
 }
