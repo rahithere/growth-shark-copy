@@ -79,16 +79,16 @@ app.use((err, req, res, next) => {
 export default app;
 
 // For local development only (commented out in production)
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
+// if (process.env.NODE_ENV !== "production") {
+const PORT = process.env.PORT || 5000;
 
-  connectDB()
-    .then(() => {
-      app.listen(PORT, () => {
-        console.log(`Server is running at port ${PORT}`)
-      })
-    }).catch((error) => {
-      console.log("server not started becasu")
-      throw error
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running at port ${PORT}`)
     })
-}
+  }).catch((error) => {
+    console.log("server not started because mongodb connection failed")
+    throw error
+  })
+// }
