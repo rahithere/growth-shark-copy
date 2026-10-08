@@ -4,10 +4,10 @@ const SubmissionTable = ({
     onSelectSubmission,
 }) => {
     return (
-        <div className="overflow-hidden rounded-2xl border border-stone-800 bg-stone-900">
+        <div className="overflow-x-hidden rounded-2xl border border-stone-800 bg-stone-900">
 
             {/* Table Header */}
-            <div className="grid grid-cols-[1.2fr_1.5fr_1fr_0.8fr_1fr_auto] items-center gap-4 border-b border-stone-800 px-6 py-4">
+            <div className="grid grid-cols-[1.2fr_1.5fr_1fr_0.8fr_1fr_auto] items-center gap-4 border-b border-stone-800 px-6 py-4 min-w-[700px]">
                 <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">
                     Name
                 </p>
@@ -32,7 +32,7 @@ const SubmissionTable = ({
             </div>
 
             {/* Table Body */}
-            <div>
+            <div className="overflow-x-auto rounded-2xl border border-stone-800 bg-stone-900">
                 {submissions.length === 0 ? (
                     <div className="flex min-h-48 items-center justify-center">
                         <p className="text-sm text-stone-500">

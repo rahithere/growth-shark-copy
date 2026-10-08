@@ -13,6 +13,10 @@ import aboutusRoute from "./api/aboutus.js";
 import mailRoute from "./api/mail.js";
 import adminSubmissions from "./api/adminSubmissions.js";
 
+// import admin routes
+import adminAuthRoutes from "./api/adminAuthRoutes.js"
+import verifyJWT from "./middleware/verifyAuth.js";
+import cookieParser from "cookie-parser";
 
 
 // Load env variables
@@ -55,6 +59,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser())
+
 // Routes
 // app.use("/api/contact", contactRoute);
 app.use("/api/career", careerRoute);
@@ -62,8 +68,13 @@ app.use("/api/partnersubmit", partnersubmitRoute); // Use app.use for consistent
 app.use("/api/aboutus", aboutusRoute);
 app.use("/api/contact", contactRoute);
 app.use("/api/mail", mailRoute);
-app.use("/api/admin/submissions", adminSubmissions);
+app.use("/api/admin/submissions", verifyJWT, adminSubmissions);
+app.use("/api/admin", adminAuthRoutes)
+
+
 console.log("Route registered: /api/mail ✅");
+
+
 // Default route with health check
 app.get("/", (req, res) => {
   res.status(200).json({ message: "Backend API is running", status: "healthy" });

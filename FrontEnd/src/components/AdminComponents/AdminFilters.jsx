@@ -6,7 +6,7 @@ const SubmissionFilters = ({
     onModeChange,
 }) => {
     return (
-        <section className="flex items-center justify-between gap-4">
+        <section className="flex items-center justify-between gap-4 flex-wrap">
 
             {/* Source Filter */}
             <select

@@ -1,6 +1,6 @@
 const AdminStats = ({ stats }) => {
     return (
-        <section className="grid grid-cols-4 gap-4">
+        <section className="grid grid-cols-2 gap-4 md:grid-cols-4 ">
 
             {/* Total */}
             <div className="rounded-2xl border border-stone-800 bg-stone-900 p-6">

@@ -27,13 +27,11 @@ const adminSchema = new Schema({
 
 
 //hash password before saving
-adminSchema.pre("save", async function (next) {
+adminSchema.pre("save", async function () {
     if (!this.isModified("password")) {
-        return next();
+        return;
     }
     this.password = await bcrypt.hash(this.password, 10);
-
-    next();
 });
 
 // Compare login password with hashed password
