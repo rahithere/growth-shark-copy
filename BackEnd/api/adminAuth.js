@@ -1,3 +1,4 @@
+import connectDB from "../db/index.js";
 import { Admin } from "../models/admin.models.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
@@ -14,6 +15,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
             .json(new ApiResponse(400, null, "All fields are required"));
     }
 
+    await connectDB()
     // Check if admin already exists
     const existingAdmin = await Admin.findOne({ email });
 
@@ -47,6 +49,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
             .json(new ApiResponse(400, null, "Email and password are required"));
     }
 
+    await connectDB()
     // Find admin
     const admin = await Admin.findOne({ email });
 
@@ -77,13 +80,15 @@ const loginAdmin = asyncHandler(async (req, res) => {
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: "none",
+        path: "/"
     });
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
+        sameSite: "none",
+        path: "/"
     });
 
     return res
@@ -105,6 +110,8 @@ const loginAdmin = asyncHandler(async (req, res) => {
 
 // LOGOUT
 const logoutAdmin = asyncHandler(async (req, res) => {
+
+    await connectDB()
     // req.admin will come from authentication middleware
     await Admin.findByIdAndUpdate(
         req.admin._id,
@@ -143,6 +150,7 @@ const changeAdminPassword = asyncHandler(async (req, res) => {
             );
     }
 
+    await connectDB()
     // req.admin through verifyJwt middleware 
     const admin = await Admin.findById(req.admin._id);
 

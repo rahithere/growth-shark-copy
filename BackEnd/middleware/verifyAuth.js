@@ -1,5 +1,6 @@
+import connectDB from "../db/index.js";
 import { Admin } from "../models/admin.models.js";
-import { sign, verify } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 const verifyJWT = async (req, res, next) => {
     try {
@@ -13,11 +14,12 @@ const verifyJWT = async (req, res, next) => {
             });
         }
 
-        const decodedToken = verify(
+        const decodedToken = jwt.verify(
             token,
             process.env.ACCESS_TOKEN_SECRET
         );
 
+        await connectDB()
         const admin = await Admin.findById(decodedToken._id).select(
             "-password -refreshToken"
         );
@@ -28,6 +30,7 @@ const verifyJWT = async (req, res, next) => {
                 message: "Admin not found.",
             });
         }
+        // console.log(admin._id, admin.email)
 
         req.admin = admin;
 

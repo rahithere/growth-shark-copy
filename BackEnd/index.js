@@ -23,9 +23,10 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 // 2️⃣ Test if env variables are loading
-console.log("EMAIL_USER:", process.env.EMAIL_USER ? "Loaded ✅" : "Missing ❌");
-console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded ✅" : "Missing ❌");
+// console.log("EMAIL_USER:", process.env.EMAIL_USER ? "Loaded ✅" : "Missing ❌");
+// console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded ✅" : "Missing ❌");
 console.log("FRONTEND_URL:", process.env.FRONTEND_URL ? "Loaded ✅" : "Missing ❌");
+console.log("MONGODB URI:", process.env.MONGODB_URI ? "LOADED" : "MISSING")
 
 
 //server starts anyway even if mongoDB connection fails (for nodemailer to run independently)
@@ -36,22 +37,21 @@ const app = express();
 
 // Determine allowed origins
 const allowedOrigins = [
-  process.env.FRONTEND_URL, // Production frontend
-  "http://localhost:5173"   // Local development
-].filter(Boolean); // Remove undefined/null
+  process.env.FRONTEND_URL,
+  "http://localhost:5173",
+].filter(Boolean);
 
-// CORS configuration
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error(`CORS blocked origin: ${origin}`));
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "OPTIONS"], // Explicitly allow common methods
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -90,17 +90,17 @@ app.use((err, req, res, next) => {
 // Export for Vercel (serverless)
 export default app;
 
-// For local development only (commented out in production)
-// if (process.env.NODE_ENV !== "production") {
-const PORT = process.env.PORT || 5000;
+// Local development only, commented out in production
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
 
-connectDB()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running at port ${PORT}`)
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server is running at port ${PORT}`);
+      });
     })
-  }).catch((error) => {
-    console.log("server not started because mongodb connection failed")
-    throw error
-  })
-// }
+    .catch((error) => {
+      console.error("MongoDB connection failed:", error.message);
+    });
+}
