@@ -1,3 +1,5 @@
+// import ResumeViewer from "./ResumeViewer";
+
 const SubmissionDetails = ({ submission }) => {
 
     // if no submission is selected
@@ -124,6 +126,7 @@ const SubmissionDetails = ({ submission }) => {
                             >
                                 Resume
                             </a>
+                            {/* <ResumeViewer message={submission.message} /> */}
                         </div>
                     )
                 ) : (
