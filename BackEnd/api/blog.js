@@ -1,9 +1,6 @@
 import express from "express"
-import router from "./adminAuthRoutes"
-import multer from "multer";
 import mongoose from "mongoose";
 import { Blog } from "../models/blog.models.js";
-import verifyJWT from "../middleware/verifyAuth";
 import cloudinary from "../utils/cloudinary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js"
@@ -12,12 +9,6 @@ import { Readable } from "node:stream";
 
 dotenv.config()
 
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: {
-        fileSize: 5 * 1024 * 1024, //5mb
-    }
-}).single(featuredImage)
 
 //upload to cloudinary
 import { Readable } from "node:stream";
@@ -155,3 +146,5 @@ const deleteBlog = asyncHandler(async (req, res) => {
 
     return res.status(200).json(new ApiResponse(200, null, "Blog deleted successfully"))
 })
+
+export { getBlogs, getBlogsBySlug, getAllBlogsForAdmin, createblog, deleteBlog }

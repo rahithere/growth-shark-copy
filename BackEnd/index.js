@@ -12,6 +12,7 @@ import partnersubmitRoute from "./api/partnersubmit.js";
 import aboutusRoute from "./api/aboutus.js";
 import mailRoute from "./api/mail.js";
 import adminSubmissions from "./api/adminSubmissions.js";
+import blogRoute from "./blogRoutes/routes.js"
 
 // import admin routes
 import adminAuthRoutes from "./api/adminAuthRoutes.js"
@@ -71,6 +72,7 @@ app.use("/api/contact", contactRoute);
 app.use("/api/mail", mailRoute);
 app.use("/api/admin/submissions", verifyJWT, adminSubmissions);
 app.use("/api/admin", adminAuthRoutes)
+app.use("/api/blogs", blogRoute)
 
 
 console.log("Route registered: /api/mail ✅");
