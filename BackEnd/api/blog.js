@@ -3,36 +3,28 @@ import mongoose from "mongoose";
 import { Blog } from "../models/blog.models.js";
 import cloudinary from "../utils/cloudinary.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import apiError from "../utils/apiError.js"
-import { ApiResponse } from "../utils/apiResponse";
-import { Readable } from "node:stream";
+import { ApiError } from "../utils/apiError.js"
+import { ApiResponse } from "../utils/apiResponse.js";
+// import { Readable } from "node:stream";
 
-dotenv.config()
 
 
 //upload to cloudinary
 import { Readable } from "node:stream";
 
-const uploadToCloudinary = (fileBuffer) => {
+const uploadToCloudinary = (buffer) => {
     return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
-            {
-                folder: "growthshark/blogs",
-                resource_type: "image",
-            },
+            { folder: "blogs" },
             (error, result) => {
-                if (error) {
-                    return reject(error);
-                }
-
+                if (error) return reject(error);
                 resolve(result);
             }
         );
 
-        Readable.from(fileBuffer).pipe(stream);
+        stream.end(buffer);
     });
-};
-
+}
 
 //delete from cloudinary
 const deleteFromCloudinary = async (publicId) => {
@@ -52,7 +44,7 @@ const getBlogs = asyncHandler(async (req, res) => {
 
 })
 
-const getBlogsBySlug = asyncHandler(async (req, res) => {
+const getBlogBySlug = asyncHandler(async (req, res) => {
     const blog = await Blog.findOne({
         slug: req.params.slug,
         status: "published"
@@ -70,8 +62,8 @@ const getAllBlogsForAdmin = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, blogs, "Blogs fetched successfully"))
 })
 
-const createblog = asyncHandler(async (req, res) => {
-    let uploadImage = ;
+const createBlog = asyncHandler(async (req, res) => {
+    let uploadImage;
 
     const { title, slug, excerpt, content, status = "draft" } = req.body
 
@@ -93,7 +85,7 @@ const createblog = asyncHandler(async (req, res) => {
 
     const normalizedSlug = slug
         .trim()
-        .toLowercase()
+        .toLowerCase()
         .replace(/\s+/g, "-")
 
 
@@ -105,14 +97,17 @@ const createblog = asyncHandler(async (req, res) => {
     }
 
     //upload image here and also check if it fails
-    uploadImage = await uploadToCloudinary(req.file)
+    uploadImage = await uploadToCloudinary(req.file.buffer)
 
     const blog = await Blog.create({
         title: title.trim(),
         slug: normalizedSlug,
         excerpt: excerpt.trim(),
         content,
-        featuredImage: uploadImage,
+        featuredImage: {
+            url: uploadImage.secure_url,
+            publicId: uploadImage.public_id
+        },
         status,
         publishedAt: status === "publised" ? new Date() : null
     })
@@ -147,4 +142,4 @@ const deleteBlog = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, null, "Blog deleted successfully"))
 })
 
-export { getBlogs, getBlogsBySlug, getAllBlogsForAdmin, createblog, deleteBlog }
+export { getBlogs, getBlogBySlug, getAllBlogsForAdmin, createBlog, deleteBlog }
