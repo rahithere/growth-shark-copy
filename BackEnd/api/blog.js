@@ -142,4 +142,16 @@ const deleteBlog = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, null, "Blog deleted successfully"))
 })
 
-export { getBlogs, getBlogBySlug, getAllBlogsForAdmin, createBlog, deleteBlog }
+const getAdminBlogBySlug = asyncHandler(async (req, res) => {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+
+    if (!blog) {
+        throw new ApiError(404, "Blog not found");
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, blog, "Blog fetched successfully")
+    );
+});
+
+export { getBlogs, getBlogBySlug, getAllBlogsForAdmin, createBlog, deleteBlog, getAdminBlogBySlug }
