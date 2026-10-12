@@ -154,4 +154,22 @@ const getAdminBlogBySlug = asyncHandler(async (req, res) => {
     );
 });
 
-export { getBlogs, getBlogBySlug, getAllBlogsForAdmin, createBlog, deleteBlog, getAdminBlogBySlug }
+const publishDraftBlog = asyncHandler(async (req, res) => {
+    const blog = await Blog.findOne({ slug: req.params.slug })
+
+    if (!blog) {
+        throw new ApiError(404, "Blog not found")
+    }
+
+    blog.status = "published"
+    blog.publishedAt = new Date()
+
+    await blog.save()
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, null, "Blog published Successfully"))
+
+})
+
+export { getBlogs, getBlogBySlug, getAllBlogsForAdmin, createBlog, deleteBlog, getAdminBlogBySlug, publishDraftBlog }

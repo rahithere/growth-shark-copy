@@ -7,7 +7,8 @@ import {
     getAllBlogsForAdmin,
     createBlog,
     deleteBlog,
-    getAdminBlogBySlug
+    getAdminBlogBySlug,
+    publishDraftBlog
 } from "../api/blog.js";
 
 const router = Router();
@@ -21,5 +22,7 @@ router.get("/admin/all", verifyJWT, getAllBlogsForAdmin);
 router.get("/admin/:slug", verifyJWT, getAdminBlogBySlug)
 router.post("/", verifyJWT, upload, createBlog);
 router.delete("/:id", verifyJWT, deleteBlog);
+router.patch("/:slug/publish", verifyJWT, publishDraftBlog)
+
 
 export default router;
